@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "rplidar_node_client");
     ros::NodeHandle n;
     //creating text file with the name distance_data
-    std::ofstream outfile
+    std::ofstream outfile;
     outfile.open("distance_data.txt", std::iosapp);
 
     ros::Subscriber sub = n.subscribe<sensor_msgs::LaserScan>("/scan", 1000, scanCallback);
