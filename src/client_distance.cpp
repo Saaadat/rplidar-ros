@@ -37,6 +37,7 @@
 
 #include "ros/ros.h"
 #include "sensor_msgs/LaserScan.h"
+#include <fstream>
 
 #define RAD2DEG(x) ((x)*180./M_PI)
 
@@ -49,6 +50,8 @@ void scanCallback(const sensor_msgs::LaserScan::ConstPtr& scan)
     for(int i = 0; i < count; i++) {
         float degree = RAD2DEG(scan->angle_min + scan->angle_increment * i);
         ROS_INFO(": [%f, %f]", degree, scan->ranges[i]);
+        //writing to our file
+        outfile<<scan->ranges[i]<<" mm"<<std::endl;
     }
 }
 
@@ -56,10 +59,13 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "rplidar_node_client");
     ros::NodeHandle n;
+    //creating text file with the name distance_data
+    std::ofstream outfile("distance_data.txt")
 
     ros::Subscriber sub = n.subscribe<sensor_msgs::LaserScan>("/scan", 1000, scanCallback);
 
     ros::spin();
-
+    outfile.close();
+    
     return 0;
 }
